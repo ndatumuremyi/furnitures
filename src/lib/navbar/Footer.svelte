@@ -14,7 +14,7 @@
 				<a href="/">Our Services</a>
 				<a href="/">Privacy Policy</a>
 				<a href="/">Affiliate Program</a>
-                <a href="/login">Login</a>
+                <a href="/auth/login">Login</a>
                 
 			</nav>
 		</div>
