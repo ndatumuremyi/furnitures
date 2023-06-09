@@ -2,9 +2,13 @@
 	import { z } from 'zod';
 	import type { PageData } from './$types';
 	import { superForm } from 'sveltekit-superforms/client';
-	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 	import FormError from '$lib/components/FormError.svelte';
 
+	export let form: {
+		error: {
+			message: string;
+		};
+	};
 	export let data: PageData;
 	let loading = false;
 	const schema = z.object({
@@ -12,12 +16,14 @@
 		email: z.string().email()
 	});
 
-	const { form, errors, enhance } = superForm(data.form, {
+	const {
+		form: formData,
+		errors,
+		enhance
+	} = superForm(data.form, {
 		validators: schema
 	});
 </script>
-
-<SuperDebug data={$form} />
 
 <div class="w-full h-full flex flex-col justify-center">
 	<form
@@ -32,7 +38,7 @@
 				name="email"
 				placeholder="email"
 				class="input py-3 variant-form-material w-full"
-				bind:value={$form.email}
+				bind:value={$formData.email}
 			/>
 			<FormError error={$errors.email} />
 		</label>
@@ -43,7 +49,7 @@
 				name="password"
 				placeholder="Password"
 				class="input py-3 variant-form-material w-full"
-				bind:value={$form.password}
+				bind:value={$formData.password}
 			/>
 			<FormError error={$errors.password} />
 		</label>
@@ -53,5 +59,9 @@
 			disabled={loading}
 			class="btn variant-filled-surface mt-12 rounded-md w-full">Login</button
 		>
+
+		{#if form?.error?.message}
+			<p class="text-red-500">{form?.error?.message}</p>
+		{/if}
 	</form>
 </div>
