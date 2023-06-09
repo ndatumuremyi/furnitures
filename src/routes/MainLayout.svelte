@@ -1,7 +1,7 @@
 <script lang="ts">
-	import SideNav from "$lib/SideNav.svelte";
-	import Footer from "$lib/navbar/Footer.svelte";
-import TopNavBar from "$lib/navbar/TopNavBar.svelte";
+	import SideNav from "$lib/components/navbar/SideNav.svelte";
+	import Footer from "$lib/components/Footer.svelte";
+import TopNavBar from "$lib/components/navbar/TopNavBar.svelte";
 import { Drawer, drawerStore } from '@skeletonlabs/skeleton';
 
 

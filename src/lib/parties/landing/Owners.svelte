@@ -1,6 +1,6 @@
 <script>
 
-	import Button from "../components/Buttons/Button.svelte";
+	import Button from "../../components/Buttons/Button.svelte";
 
 </script>
 <div class="flex gap-32 mx-auto items-center flex-wrap">

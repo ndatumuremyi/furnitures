@@ -1,9 +1,9 @@
 <script>
-	import Button from "$lib/navbar/components/Buttons/Button.svelte";
-import LandingHero from "$lib/navbar/landing/LandingHero.svelte";
-	import Owners from "$lib/navbar/landing/Owners.svelte";
-	import WhyUs from "$lib/navbar/landing/WhyUs.svelte";
-	import WhyUsCard from "$lib/navbar/landing/WhyUsCard.svelte";
+	import Button from "$lib/components/Buttons/Button.svelte";
+import LandingHero from "$lib/parties/landing/LandingHero.svelte";
+	import Owners from "$lib/parties/landing/Owners.svelte";
+	import WhyUs from "$lib/parties/landing/WhyUs.svelte";
+	import WhyUsCard from "$lib/parties/landing/WhyUsCard.svelte";
 import LandingLayout from "./MainLayout.svelte";
 
 </script>
