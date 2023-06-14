@@ -8,6 +8,18 @@ declare namespace App {
 	// interface Platform {}
 }
 declare interface topNav {
-    name: string
-    url: string
+	name: string;
+	url: string;
 }
+type Message = {
+	type: 'error' | 'success' | 'warning';
+	text: string;
+	data?: any;
+	status?: number;
+};
+
+type Auth = {
+	access_token?: string;
+}
+
+type Fetch = (input: URL | RequestInfo, init?: RequestInit | undefined) => Promise<Response>;

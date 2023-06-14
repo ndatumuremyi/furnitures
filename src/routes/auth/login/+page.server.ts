@@ -1,48 +1,48 @@
 import { z } from 'zod';
-import { superValidate } from 'sveltekit-superforms/server';
-import { fail, redirect } from '@sveltejs/kit';
-import { loginUser } from '$lib/utils/userUtils.js';
-import { setAuthToken } from '$lib/utils/authUtils.js';
+import { superValidate, message } from 'sveltekit-superforms/server';
 
-// Name has a default value just to display something in the form.
+import { login } from '$lib/utils/backend/auth.js';
+import { redirect } from '@sveltejs/kit';
+
 const schema = z.object({
-  password: z.string().min(8).max(100),
-  email: z.string().email()
+	password: z.string().min(8).max(100),
+	email: z.string().email()
 });
 
 export const load = async (event) => {
-    const form = await superValidate(event,schema)
-    return {
-        form
-    }
-}
+	const form = await superValidate<typeof schema, Message>(event, schema);
+	return {
+		form
+	};
+};
 
 export const actions = {
-    default: async ({cookies, request }) => {
-        const form = await superValidate(request,schema);
-        
-        if(!form.valid){
-            return fail(400, {
-                form
-            })
-        }
-        const {data: {email, password}} = form;
-    
-        const {error, token} = await loginUser(email, password);
-        if(error){
-            return fail(error.status, {
-                form,
-                error
-            })
-        }
-        if(token){
-            setAuthToken({cookies, token: token as string});
+	default: async ({ request, cookies, fetch }) => {
+		const form = await superValidate<typeof schema, Message>(request, schema);
 
-            throw redirect(302,'/profile');
-        }
-        
-        return {
-            form
-        }
-    }
-}
+		if (!form.valid) {
+			return message(
+				form,
+				{
+					type: 'error',
+					text: 'Please fill in the form correctly'
+				},
+				{
+					status: 400
+				}
+			);
+		}
+		const {
+			data: { email, password }
+		} = form;
+
+		const msg= await login(email, password, fetch, cookies);
+		if(msg.type === 'success'){
+			throw redirect(302, '/me');
+		}else {
+			return message(form,msg, {
+				status: (msg.status || 400) as any
+			});
+		}
+	}
+};
