@@ -4,7 +4,6 @@ import type { Cookies } from '@sveltejs/kit';
 
 const DEFAULT_HTTP_HEADERS: any = {
   // 'Content-Type': 'multipart/form-data',
-  'Content-Type': 'application/json',
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
 };
@@ -23,15 +22,23 @@ class Fetcher {
 	async get(endpoint: string): Promise<Response> {
 		const response = await this.fetch(`${keys.BACKEND_URL}${endpoint}`, {
 			method: 'GET',
-			headers: DEFAULT_HTTP_HEADERS
+			headers: {
+				...DEFAULT_HTTP_HEADERS,
+				'Content-Type': 'application/json',
+			}
 		});
     return successOrThrow(response);
 	}
-	async post(endpoint: string, data: object): Promise<Response> {
+	async post(endpoint: string, data: FormData | object, isForm=false): Promise<Response> {
+		const headers = isForm? DEFAULT_HTTP_HEADERS: {
+			...DEFAULT_HTTP_HEADERS,
+			'Content-Type': 'application/json',
+		}
+		const body: FormData | string = isForm? data as FormData: JSON.stringify(data);
 		const response = await this.fetch(`${keys.BACKEND_URL}${endpoint}`, {
 			method: 'POST',
-			headers: DEFAULT_HTTP_HEADERS,
-			body: data?JSON.stringify(data):data
+			headers: headers,
+			body: body
 		});
     return successOrThrow(response);
 	}

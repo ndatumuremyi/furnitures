@@ -3,7 +3,6 @@
 import LandingHero from "$lib/parties/landing/LandingHero.svelte";
 	import Owners from "$lib/parties/landing/Owners.svelte";
 	import WhyUs from "$lib/parties/landing/WhyUs.svelte";
-	import WhyUsCard from "$lib/parties/landing/WhyUsCard.svelte";
 import LandingLayout from "./MainLayout.svelte";
 
 </script>

@@ -3,8 +3,7 @@
 	import type { PageData } from './$types';
 	import { superForm } from 'sveltekit-superforms/client';
 	import FormError from '$lib/components/FormError.svelte';
-	import { toastStore } from '@skeletonlabs/skeleton';
-	import type { ToastSettings } from '@skeletonlabs/skeleton';
+	import toast from '$lib/utils/toast';
 
 	export let data: PageData;
 	let loading = false;
@@ -22,15 +21,7 @@
 		validators: schema
 	});
 
-	$: {
-		if ($message) {
-			const toastSettings: ToastSettings = {
-				message: $message.text,
-				background: $message.type !== "success" ? 'variant-filled-error': 'variant-filled-success',
-			};
-			toastStore.trigger(toastSettings);
-		}
-	}
+	$: toast($message)
 </script>
 
 <div class="w-full h-full flex flex-col justify-center">
