@@ -3,12 +3,8 @@
 	import type { PageData } from './$types';
 	import { superForm } from 'sveltekit-superforms/client';
 	import FormError from '$lib/components/FormError.svelte';
+	import toast from '$lib/utils/toast';
 
-	export let form: {
-		error: {
-			message: string;
-		};
-	};
 	export let data: PageData;
 	let loading = false;
 	const schema = z.object({
@@ -19,10 +15,13 @@
 	const {
 		form: formData,
 		errors,
+		message,
 		enhance
 	} = superForm(data.form, {
 		validators: schema
 	});
+
+	$: toast($message)
 </script>
 
 <div class="w-full h-full flex flex-col justify-center">
@@ -60,8 +59,8 @@
 			class="btn variant-filled-surface mt-12 rounded-md w-full">Login</button
 		>
 
-		{#if form?.error?.message}
-			<p class="text-red-500">{form?.error?.message}</p>
+		{#if $message && $message.type === 'error'}
+			<div class="text-red-500">{$message.text}</div>
 		{/if}
 	</form>
 </div>
