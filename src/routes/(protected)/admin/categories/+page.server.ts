@@ -6,21 +6,27 @@ import createProductSchema from '$lib/schema/createProductSchema.js';
 import Fetcher from '$lib/utils/Fetcher.js';
 import endpoints from '$lib/constants/endpoints.js';
 import { errorMessage } from '$lib/utils/backend/error.js';
+import type {RequestEvent} from "@sveltejs/kit";
 
 
 
-export const load = async (event) => {
+export const load = async (event: RequestEvent) => {
+	const {fetch, cookies} = event;
 	const form = await superValidate<typeof createProductSchema, Message>(event, createProductSchema);
+
+	const res = await Fetcher.of(fetch, cookies).get(endpoints.categories);
 	return {
-		form
+		form,
+		categories: await res.json()
+
 	};
 };
 
 export const actions = {
-	createCategory: async ({ request, cookies, fetch }) => {
+	createCategory: async ({ request, cookies, fetch }:RequestEvent) => {
         const formData = await request.formData();
         const form = await superValidate<typeof createProductSchema, Message>(formData, createProductSchema);
-        
+
 
 
 		if (!form.valid) {
@@ -35,12 +41,10 @@ export const actions = {
 				}
 			);
 		}
-        // const image = formData.get('image')
 
         try{
            const response = await Fetcher.of(fetch, cookies).post(endpoints.categories, formData, true)
            const res = await response.json();
-           console.log(res)
            return message(form, {
             type: 'success',
             text: res.detail,
@@ -50,13 +54,8 @@ export const actions = {
         }catch(e: any){
             const msg = await errorMessage(e);
             return message(form,msg, {
-				status: (msg.status || 400) as any
+				status: (msg.status || 400) as never
 			});
-        }
-        
-        
-		return {
-            form
         }
 	}
 };

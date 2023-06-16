@@ -13,12 +13,22 @@ const {
 		validators: createProductSchema
 	});
 
-	$: toast($message)
+let submitting = false;
+	$:{
+		if(submitting){
+			toast($message);
+			submitting = false;
+		}
+	}
 </script>
 
 
 <div class="bg-black rounded-md">
-	<form use:enhance method="post" action="?/createCategory" class=" bg-primary-100/40 p-12 flex flex-col">
+	<form on:submit={() => {
+	submitting = true;
+	}
+	} enctype="multipart/form-data" use:enhance
+		  method="post" action="?/createCategory" class=" bg-primary-100/40 p-12 flex flex-col">
         <h2 class="text-2xl font-bold mb-6 text-center">Create Category</h2>
 		<div class="mb-6">
 			<label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -31,7 +41,7 @@ const {
 				class="input rounded-lg"
 				placeholder="name"
 				bind:value={$form.name}
-			
+
 			/>
 			<FormError error={$errors.name} />
 		</div>

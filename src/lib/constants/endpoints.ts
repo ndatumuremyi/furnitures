@@ -3,6 +3,7 @@ const endpoints = {
     users: '/users',
     profile: '/profile',
     categories: '/categories',
+    furniture: '/furniture',
 }
 
 export default endpoints;

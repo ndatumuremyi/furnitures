@@ -1,9 +1,13 @@
 <script lang="ts">
 	const navigations = [
 		{
-			name: 'About us',
+			name: 'Categories',
 			url: '/admin/categories',
 			icon: 'category'
+		},{
+			name: 'Farnitures',
+			url: '/admin/farnitures',
+			icon: 'chair'
 		}
 	];
 </script>
